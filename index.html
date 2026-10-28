@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paulami Bhosle | ML & AI Engineer — Among Us Portfolio</title>
+  <meta name="description" content="Portfolio of Paulami Bhosle — ML & AI Engineer, Google Student Ambassador. Built with an authentic Among Us theme.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-cyan">
+
+  <!-- Background Space Canvas -->
+  <canvas id="spaceCanvas"></canvas>
+
+  <!-- Sound & Audio Controls HUD -->
+  <div class="hud-top-right">
+    <button id="soundToggleBtn" class="hud-pill" title="Toggle Sound FX">
+      <span class="hud-icon">🔊</span>
+      <span id="soundLabel">SFX: ON</span>
+    </button>
+    <a href="https://github.com/code-paul-creator" target="_blank" rel="noopener noreferrer" class="hud-pill github-hud">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+      </svg>
+      <span>@code-paul-creator</span>
+    </a>
+  </div>
+
+  <!-- Total Tasks Progress Bar (Classic Top Green Bar) -->
+  <header class="ship-taskbar-wrapper">
+    <div class="ship-taskbar-container">
+      <div class="taskbar-label">TOTAL TASKS COMPLETED</div>
+      <div class="taskbar-track">
+        <div class="taskbar-fill" id="taskProgressBar"></div>
+        <div class="taskbar-segments">
+          <span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="taskbar-counter" id="taskCounterText">6 / 6 TASKS</div>
+    </div>
+  </header>
+
+  <!-- Sticky Left Tasks HUD (Skeld Checklist) -->
+  <aside class="skeld-tasklist" id="skeldTaskList">
+    <div class="tasklist-header">
+      <span class="yellow-title">TASKS</span>
+      <button class="minimize-btn" id="toggleTaskListBtn" title="Minimize Tasks">−</button>
+    </div>
+    <ul class="tasks-ul">
+      <li class="task-item active" data-target="hero-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Cafeteria: Introduce Paulami</span>
+      </li>
+      <li class="task-item" data-target="admin-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Admin: Download Dossier</span>
+      </li>
+      <li class="task-item" data-target="electrical-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Electrical: Calibrate Tech Stack</span>
+      </li>
+      <li class="task-item" data-target="medbay-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">MedBay: Inspect Bhaskara AI</span>
+      </li>
+      <li class="task-item" data-target="reactor-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Reactor: Examine CityPulse &amp; Traces</span>
+      </li>
+      <li class="task-item" data-target="discussion-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Emergency: Vote for SWE Intern</span>
+      </li>
+      <li class="task-item" data-target="comms-sec">
+        <span class="bullet">•</span>
+        <span class="task-text">Comms: Transmit Signal</span>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Main Starship Deck Content -->
+  <main class="skeld-deck">
+
+    <!-- HERO SECTION: START WITH NAME & TARGETED ROLE -->
+    <section id="hero-sec" class="deck-room room-hero">
+      
+      <!-- Floating Drifting Mini Crewmate in Deep Space Background -->
+      <div class="drifting-crewmate" aria-hidden="true">
+        <div class="crewmate-mini-wrap">
+          <svg class="mini-among-svg" viewBox="0 0 100 130">
+            <path class="cm-backpack" d="M15 45 C15 35 25 35 25 35 L25 90 C25 90 15 90 15 80 Z" fill="#1b8296"/>
+            <path class="cm-body" d="M25 50 C25 15 75 15 75 50 L75 95 C75 110 65 110 65 95 L65 85 L45 85 L45 95 C45 110 35 110 35 95 L25 95 Z" fill="#38fedc"/>
+            <path class="cm-shadow" d="M25 55 C25 25 45 20 45 20 L45 95 L35 95 L25 95 Z" fill="#1b8296" opacity="0.4"/>
+            <path class="cm-visor" d="M50 35 C75 35 85 45 85 55 C85 65 75 70 50 70 C40 70 40 35 50 35 Z" fill="#9be6fa"/>
+            <path class="cm-visor-glare" d="M55 40 C70 40 78 45 78 50 C78 54 72 50 58 48 Z" fill="#ffffff" opacity="0.8"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Role Reveal Banner Alert -->
+      <div class="role-reveal-container">
+        <div class="shhh-text">SHHHHH!</div>
+        <div class="role-card">
+          <div class="role-type">CREWMATE</div>
+          <p class="role-tagline">There is <span class="highlight-red">1 Impostor</span> among the commits.</p>
+        </div>
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-titles">
+          <div class="badge-role-pill">
+            <span class="ping-dot"></span>
+            MISSION DIRECTIVE &bull; SHIP SECURE CODE
+          </div>
+          <!-- START WITH USER NAME AND ROLE -->
+          <h1 class="crew-name">PAULAMI BHOSLE</h1>
+          <h2 class="target-role">
+            <span class="role-prefix">ROLE:</span> ML / AI ENGINEER
+            <span class="role-sub">&amp; SWE INTERN</span>
+          </h2>
+          <p class="hero-bio">
+            First-year B.Tech CSE (AI &amp; ML) &bull; <strong>Google Student Ambassador (GSA 2026)</strong>.
+            Building auditable AI agents, mechanistic interpretability toolkits, and satellite earth-observation systems that make someone's day measurably better.
+          </p>
+
+          <!-- Color Customizer for Crewmate Suit -->
+          <div class="suit-customizer">
+            <span class="customizer-label">SELECT SUIT COLOR:</span>
+            <div class="color-palette">
+              <button class="color-dot active" data-color="cyan" style="--c: #38fedc;" title="Cyan"></button>
+              <button class="color-dot" data-color="red" style="--c: #c51111;" title="Red"></button>
+              <button class="color-dot" data-color="yellow" style="--c: #f5f557;" title="Yellow"></button>
+              <button class="color-dot" data-color="lime" style="--c: #50ef39;" title="Lime"></button>
+              <button class="color-dot" data-color="purple" style="--c: #6b2fbb;" title="Purple"></button>
+              <button class="color-dot" data-color="pink" style="--c: #ed54ba;" title="Pink"></button>
+              <button class="color-dot" data-color="orange" style="--c: #f07d0d;" title="Orange"></button>
+              <button class="color-dot" data-color="black" style="--c: #3f474e;" title="Black"></button>
+            </div>
+          </div>
+
+          <!-- Hero Actions -->
+          <div class="hero-buttons">
+            <button id="emergencyBtn" class="btn-emergency">
+              <span class="alarm-glow"></span>
+              <span class="emergency-icon">🚨</span>
+              <span class="emergency-txt">EMERGENCY MEETING</span>
+            </button>
+            <a href="#medbay-sec" class="btn-spaceship btn-ghost">
+              <span class="btn-icon">📋</span> VIEW TASKS &amp; PROJECTS
+            </a>
+            <a href="https://github.com/code-paul-creator" target="_blank" rel="noopener noreferrer" class="btn-spaceship btn-dark">
+              <span class="btn-icon">⭐</span> GITHUB PROFILE
+            </a>
+          </div>
+        </div>
+
+        <!-- Giant Animated Crewmate Display -->
+        <div class="hero-crewmate-stage">
+          <div class="skeld-pedestal">
+            <div class="pedestal-hologram"></div>
+            <!-- Interactive Crewmate Avatar -->
+            <div class="crewmate-avatar" id="mainCrewmate">
+              <!-- Crewmate Hat (Google Student Ambassador Cap) -->
+              <div class="hat-gsa">
+                <div class="cap-base"></div>
+                <div class="cap-badge">GSA '26</div>
+              </div>
+              <svg class="crewmate-svg" viewBox="0 0 160 210">
+                <!-- Backpack (Oxygen Tank) -->
+                <rect class="suit-dark" x="18" y="55" width="28" height="95" rx="14" fill="var(--suit-shadow)" stroke="#111" stroke-width="8"/>
+                <!-- Main Body -->
+                <path class="suit-main" d="M 40 80 C 40 25, 120 25, 120 80 L 120 160 C 120 185, 105 185, 105 160 L 105 140 L 75 140 L 75 160 C 75 185, 40 185, 40 160 Z" fill="var(--suit-color)" stroke="#111" stroke-width="8" stroke-linejoin="round"/>
+                <!-- Shading Arc -->
+                <path class="suit-dark" d="M 40 85 C 40 38, 75 30, 75 30 L 75 150 L 58 150 L 40 150 Z" fill="var(--suit-shadow)" opacity="0.35"/>
+                <!-- Visor -->
+                <ellipse cx="98" cy="78" rx="34" ry="22" fill="#8bf4ff" stroke="#111" stroke-width="7"/>
+                <ellipse cx="98" cy="78" rx="28" ry="17" fill="#68c9ea"/>
+                <!-- Visor Glare -->
+                <path d="M 85 68 C 105 68, 120 72, 120 76 C 120 80, 110 74, 90 73 Z" fill="#ffffff" opacity="0.9"/>
+                <!-- Legs separator line -->
+                <line x1="75" y1="140" x2="75" y2="155" stroke="#111" stroke-width="8"/>
+              </svg>
+              <!-- Speech Bubble -->
+              <div class="crewmate-dialogue">
+                <span class="dialogue-name">Paulami:</span>
+                <span id="crewmateVoice">"I'd rather ship working code than debate theoretical demos!"</span>
+              </div>
+            </div>
+            <div class="pedestal-plate">LOCATION: CAFETERIA &bull; STATUS: CREWMATE</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Room Navigator Pill Strip -->
+      <nav class="skeld-navigation-strip">
+        <a href="#admin-sec" class="nav-room-pill"><span class="icon">📁</span> Admin (About)</a>
+        <a href="#electrical-sec" class="nav-room-pill"><span class="icon">⚡</span> Electrical (Tech)</a>
+        <a href="#medbay-sec" class="nav-room-pill"><span class="icon">🛰️</span> MedBay (Bhaskara AI)</a>
+        <a href="#reactor-sec" class="nav-room-pill"><span class="icon">☢️</span> Reactor (CityPulse &amp; Agents)</a>
+        <a href="#discussion-sec" class="nav-room-pill"><span class="icon">🗳️</span> Cafeteria (Voting)</a>
+        <a href="#comms-sec" class="nav-room-pill"><span class="icon">📡</span> Comms (Contact)</a>
+      </nav>
+    </section>
+
+    <!-- SECTION 1: ADMIN ROOM (ABOUT ME & DOSSIER) -->
+    <section id="admin-sec" class="deck-room room-admin">
+      <div class="room-sign">
+        <div class="sign-light"></div>
+        <h2>ROOM: ADMIN // CREWMATE DOSSIER</h2>
+      </div>
+
+      <div class="skeld-console-layout">
+        <!-- Left: Tablet Card -->
+        <div class="skeld-tablet">
+          <div class="tablet-header">
+            <span class="tablet-title">CREW ID CARD &bull; SWIPE CARD TASK</span>
+            <span class="tablet-status ok">ACCEPTED</span>
+          </div>
+          <div class="tablet-body">
+            <div class="id-badge-card">
+              <div class="id-avatar-box">
+                <div class="crewmate-mini-head">
+                  <div class="mini-visor"></div>
+                </div>
+                <div class="badge-role-tag">CREWMATE</div>
+              </div>
+              <div class="id-details">
+                <div class="id-row"><span class="label">NAME:</span> <span class="val bold">Paulami Bhosle</span></div>
+                <div class="id-row"><span class="label">TARGET ROLE:</span> <span class="val cyan">ML / AI Engineer &amp; SWE Intern</span></div>
+                <div class="id-row"><span class="label">PROGRAM:</span> <span class="val">B.Tech CSE (AI &amp; ML) &bull; 1st Year</span></div>
+                <div class="id-row"><span class="label">HONORS:</span> <span class="val yellow">Google Student Ambassador (2026)</span></div>
+                <div class="id-row"><span class="label">CLEARANCE:</span> <span class="val green">LEVEL 5 (Full-Stack &amp; AI Shipped)</span></div>
+                <div class="id-row"><span class="label">COFFEE RATIO:</span> <span class="val">&infin; (Infinite Debug Fuel)</span></div>
+              </div>
+            </div>
+
+            <div class="terminal-log">
+              <div class="log-line text-dim">// Dossier Summary:</div>
+              <div class="log-line">"I like projects that sit right at the intersection of <strong>AI, real-world data, and decisions people actually have to make</strong> &mdash; not just fragile prompt wrappers or toys."</div>
+              <div class="log-line text-green">&gt; Goal: SWE internship where I can learn at warp speed and ship high-impact features.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Notable Credentials & Invite-only Missions -->
+        <div class="skeld-terminal">
+          <div class="terminal-screen-header">
+            <div class="screen-dots"><span></span><span></span><span></span></div>
+            <span>AFFILIATIONS &amp; CREDENTIALS</span>
+          </div>
+          <div class="terminal-screen-body">
+            <div class="mission-log-entry">
+              <div class="mission-badge gsa">GSA 2026</div>
+              <div class="mission-info">
+                <h4>Google Student Ambassador</h4>
+                <p>Selected to lead AI &amp; Cloud initiatives, student workshops, and developer developer evangelism.</p>
+              </div>
+            </div>
+
+            <div class="mission-log-entry">
+              <div class="mission-badge meetup">INVITE ONLY</div>
+              <div class="mission-info">
+                <h4>OpenSearch Meetup &bull; Pune</h4>
+                <p>Participated in specialized deep-dives on enterprise search, indexing engines, and retrieval architectures.</p>
+              </div>
+            </div>
+
+            <div class="mission-log-entry">
+              <div class="mission-badge meetup">INVITE ONLY</div>
+              <div class="mission-info">
+                <h4>Claude Meetup &bull; KJ Somaiya</h4>
+                <p>Engaged in advanced discussions on mechanistic interpretability, frontier models, and reasoning benchmarks.</p>
+              </div>
+            </div>
+
+            <div class="vent-container">
+              <button class="vent-btn" id="ventEasterEggBtn" title="Vents are only for Impostors... or curious devs!">
+                <span class="vent-grate"></span>
+                <span>VENT TO SECRET NOTE</span>
+              </button>
+              <div class="vent-secret-box" id="ventSecretBox">
+                ⚡ <em>"Vent status: Clear! You discovered the secret quote: 'I'd rather debug a 2 AM production issue than rewrite the same TODO app for the 5th time.'"</em>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: ELECTRICAL ROOM (TECH STACK & SKILLS) -->
+    <section id="electrical-sec" class="deck-room room-electrical">
+      <div class="room-sign">
+        <div class="sign-light red-blink"></div>
+        <h2>ROOM: ELECTRICAL // FIX WIRING &amp; TECH STACK</h2>
+      </div>
+      <p class="section-desc">Task: Connect the correct dependencies and calibrate the AI pipeline.</p>
+
+      <div class="wiring-grid">
+        
+        <!-- Category 1: AI & Machine Learning -->
+        <div class="wire-box" style="--wire-color: #f5f557;">
+          <div class="wire-header">
+            <span class="wire-light yellow"></span>
+            <h3>AI &amp; MACHINE LEARNING</h3>
+          </div>
+          <div class="wire-content">
+            <div class="skill-tag"><span class="tag-icon">🧠</span> PyTorch</div>
+            <div class="skill-tag"><span class="tag-icon">✨</span> Google Gemini API</div>
+            <div class="skill-tag"><span class="tag-icon">☁️</span> Vertex AI</div>
+            <div class="skill-tag"><span class="tag-icon">🔍</span> Mechanistic Interpretability</div>
+            <div class="skill-tag"><span class="tag-icon">📊</span> Pandas &amp; NumPy</div>
+            <div class="skill-tag"><span class="tag-icon">🤖</span> LLM/RAG Agents</div>
+            <div class="skill-tag"><span class="tag-icon">👁️</span> Computer Vision</div>
+          </div>
+          <div class="wire-end"><span>CIRCUIT: 100% CALIBRATED</span></div>
+        </div>
+
+        <!-- Category 2: Languages -->
+        <div class="wire-box" style="--wire-color: #38fedc;">
+          <div class="wire-header">
+            <span class="wire-light cyan"></span>
+            <h3>LANGUAGES</h3>
+          </div>
+          <div class="wire-content">
+            <div class="skill-tag"><span class="tag-icon">🐍</span> Python (Advanced)</div>
+            <div class="skill-tag"><span class="tag-icon">⚡</span> JavaScript (ES6+)</div>
+            <div class="skill-tag"><span class="tag-icon">🌐</span> HTML5 &amp; Modern CSS</div>
+            <div class="skill-tag"><span class="tag-icon">⚙️</span> C Programming</div>
+            <div class="skill-tag"><span class="tag-icon">🐚</span> Shell / Bash</div>
+            <div class="skill-tag"><span class="tag-icon">🗄️</span> SQL &amp; Data Schemas</div>
+          </div>
+          <div class="wire-end"><span>CIRCUIT: 100% CALIBRATED</span></div>
+        </div>
+
+        <!-- Category 3: Frameworks & Web -->
+        <div class="wire-box" style="--wire-color: #50ef39;">
+          <div class="wire-header">
+            <span class="wire-light lime"></span>
+            <h3>FRAMEWORKS &amp; BACKEND</h3>
+          </div>
+          <div class="wire-content">
+            <div class="skill-tag"><span class="tag-icon">⚡</span> FastAPI</div>
+            <div class="skill-tag"><span class="tag-icon">⚛️</span> React.js</div>
+            <div class="skill-tag"><span class="tag-icon">🟢</span> Node.js</div>
+            <div class="skill-tag"><span class="tag-icon">🔌</span> REST APIs &amp; WebSockets</div>
+            <div class="skill-tag"><span class="tag-icon">📈</span> Chart.js Data Viz</div>
+            <div class="skill-tag"><span class="tag-icon">📦</span> Single-page Web Apps</div>
+          </div>
+          <div class="wire-end"><span>CIRCUIT: 100% CALIBRATED</span></div>
+        </div>
+
+        <!-- Category 4: Cloud & DevOps -->
+        <div class="wire-box" style="--wire-color: #ed54ba;">
+          <div class="wire-header">
+            <span class="wire-light pink"></span>
+            <h3>CLOUD, TOOLS &amp; ARCHITECTURE</h3>
+          </div>
+          <div class="wire-content">
+            <div class="skill-tag"><span class="tag-icon">☁️</span> Google Cloud Platform</div>
+            <div class="skill-tag"><span class="tag-icon">🐙</span> Git &amp; GitHub</div>
+            <div class="skill-tag"><span class="tag-icon">🔒</span> Hash-chained Audit Trails</div>
+            <div class="skill-tag"><span class="tag-icon">🛰️</span> Earth Observation Systems</div>
+            <div class="skill-tag"><span class="tag-icon">💻</span> VS Code / Linux</div>
+            <div class="skill-tag"><span class="tag-icon">🎨</span> Figma Prototyping</div>
+          </div>
+          <div class="wire-end"><span>CIRCUIT: 100% CALIBRATED</span></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3: MEDBAY & REACTOR (PROJECTS / TASKS) -->
+    <section id="medbay-sec" class="deck-room room-medbay">
+      <div class="room-sign">
+        <div class="sign-light green-blink"></div>
+        <h2>ROOM: MEDBAY &amp; REACTOR // MISSION TASKS &amp; PROJECTS</h2>
+      </div>
+      <p class="section-desc">Inspect vital projects and real deployments from <a href="https://github.com/code-paul-creator?tab=repositories" target="_blank" class="link-yellow">@code-paul-creator</a>.</p>
+
+      <div class="tasks-grid">
+
+        <!-- PROJECT 1: Bhaskara Vision (Flagship) -->
+        <article class="project-task-card flagship">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">🛰️ SATELLITE RADAR</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">Bhaskara Vision</h3>
+              <span class="lang-pill python">Python</span>
+            </div>
+            <p class="project-tagline">
+              AI-driven earth-observation system fusing optical and radar satellite data to detect crop stress, moisture deficits, and growth stages in real time.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">🌿 Inspired by India's Bhaskara satellites for climate-resilient irrigation insights.</div>
+              <div class="highlight-item">🛰️ Multi-modal data fusion: optical + synthetic aperture radar (SAR).</div>
+              <div class="highlight-item">🎯 Real-time decision alerts for precision agriculture.</div>
+            </div>
+            <div class="tech-pills">
+              <span>Python</span>
+              <span>Satellite SAR</span>
+              <span>Computer Vision</span>
+              <span>Earth Observation</span>
+              <span>GeoAI</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/bhaskara-vision" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 2: CityPulse -->
+        <article class="project-task-card" id="reactor-sec">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">🏙️ DECISION INTELLIGENCE</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">CityPulse</h3>
+              <span class="lang-pill python">Python / FastAPI</span>
+            </div>
+            <p class="project-tagline">
+              Decision Intelligence Console for Urban Mobility &amp; Public Safety. Converts raw urban sensor feeds, 311 tickets, and traffic reports into explainable forecasts and grounded copilot answers.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">📊 Real-time risk board &amp; statistically-detected anomalies.</div>
+              <div class="highlight-item">🤖 Grounded chat copilot answering with verified telemetry.</div>
+              <div class="highlight-item">🚦 Calibrated to multi-tier urban traffic patterns.</div>
+            </div>
+            <div class="tech-pills">
+              <span>FastAPI</span>
+              <span>Pandas</span>
+              <span>LLM/RAG</span>
+              <span>Chart.js</span>
+              <span>Real-time</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/CityPulse" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 3: CausalTrace -->
+        <article class="project-task-card">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">🔬 INTERPRETABILITY</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">CausalTrace</h3>
+              <span class="lang-pill python">Python / PyTorch</span>
+            </div>
+            <p class="project-tagline">
+              Mechanistic Interpretability Toolkit for Transformer Language Models. Traces inside the LLM black box to uncover <em>why</em> the model generates each token.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">🧠 Activation patching &amp; causal mediation analysis on transformer layers.</div>
+              <div class="highlight-item">🎯 Verifies model knowledge vs. spurious correlations.</div>
+            </div>
+            <div class="tech-pills">
+              <span>PyTorch</span>
+              <span>Transformers</span>
+              <span>Mechanistic Interpretability</span>
+              <span>Python</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/CausalTrace" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 4: Nyay-Sathi -->
+        <article class="project-task-card">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">⚖️ GENAI / GEMINI</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">Nyay-Sathi</h3>
+              <span class="lang-pill js">JavaScript / Gemini</span>
+            </div>
+            <p class="project-tagline">
+              GenAI legal assistant powered by Google Gemini: contract explanation in plain language, risky clause detection, grounded Q&amp;A, and lawyer-prep checklist across 13 Indian languages.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">🌐 13 Indian regional languages supported.</div>
+              <div class="highlight-item">📑 Document comparison with risk score index.</div>
+            </div>
+            <div class="tech-pills">
+              <span>Google Gemini</span>
+              <span>JavaScript</span>
+              <span>Multilingual</span>
+              <span>LegalTech</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/nyay-sathi" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 5: WhatsApp Notification Router -->
+        <article class="project-task-card">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">📲 MULTIMODAL AGENT</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">WhatsApp Router</h3>
+              <span class="lang-pill python">Python / Gemini</span>
+            </div>
+            <p class="project-tagline">
+              Personalized notification router (HackerRank Orchestrate). Multimodal (text, image, voice) triage into notify/digest/mute using Gemini + deterministic safety rules.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">🛡️ Dual layer: LLM triage + deterministic safety boundaries.</div>
+              <div class="highlight-item">🎧 Full support for audio notes and screenshot triage.</div>
+            </div>
+            <div class="tech-pills">
+              <span>Gemini 1.5</span>
+              <span>Multimodal</span>
+              <span>Python</span>
+              <span>Orchestration</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/whatsapp-notification-router" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+        <!-- PROJECT 6: Servicing Agent -->
+        <article class="project-task-card">
+          <div class="card-status-bar">
+            <span class="task-badge green">COMPLETED TASK</span>
+            <span class="room-tag">🔐 AUDITABLE AI</span>
+          </div>
+          <div class="card-content">
+            <div class="card-header-flex">
+              <h3 class="project-title">Servicing Agent</h3>
+              <span class="lang-pill python">Python</span>
+            </div>
+            <p class="project-tagline">
+              Conversational resolution for banking fee reversals, credit-limit updates, and card replacements with a verifiable cryptographic hash-chained audit trail on every decision.
+            </p>
+            <div class="project-highlights">
+              <div class="highlight-item">🔗 Immutable hash-chain guarantees zero unauthorized overrides.</div>
+              <div class="highlight-item">🤝 Seamless full-context handoff to human agents when required.</div>
+            </div>
+            <div class="tech-pills">
+              <span>Python</span>
+              <span>Cryptographic Hashing</span>
+              <span>Auditable AI</span>
+              <span>FinTech</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="https://github.com/code-paul-creator/servicing-agent" target="_blank" rel="noopener noreferrer" class="btn-task-action">
+              <span>VIEW ON GITHUB</span>
+              <span class="arrow">&rarr;</span>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4: CAFETERIA (EMERGENCY MEETING & INTERACTIVE VOTING SCREEN) -->
+    <section id="discussion-sec" class="deck-room room-voting">
+      <div class="room-sign emergency">
+        <div class="sign-light red-blink"></div>
+        <h2>CAFETERIA // EMERGENCY DISCUSSION &amp; VOTING</h2>
+      </div>
+      <p class="section-desc">Who should join your team as a Software Engineering or AI Intern?</p>
+
+      <!-- The Classic Among Us Voting Screen -->
+      <div class="voting-slate">
+        <div class="voting-header">
+          <span class="vote-title">WHO IS THE RIGHT CANDIDATE?</span>
+          <span class="vote-timer" id="voteTimer">VOTING TIME: 120s</span>
+        </div>
+
+        <div class="players-voting-grid">
+          
+          <!-- Candidate 1: Paulami (Recommended!) -->
+          <div class="player-vote-card recommended" id="cardPaulami">
+            <div class="player-avatar-mini cyan">
+              <div class="mini-visor"></div>
+            </div>
+            <div class="player-info">
+              <div class="player-name">Paulami (Cyan) <span class="badge-role">ML/AI CREWMATE</span></div>
+              <div class="player-desc">Fast shipper &bull; GSA '26 &bull; 27 Repos &bull; Auditable AI</div>
+            </div>
+            <button class="btn-vote" data-candidate="Paulami">
+              <span class="vote-icon">🗳️</span> VOTE TO HIRE
+            </button>
+          </div>
+
+          <!-- Sus Candidate 2: Buggy Legacy Code (Red) -->
+          <div class="player-vote-card sus" id="cardRed">
+            <div class="player-avatar-mini red">
+              <div class="mini-visor"></div>
+            </div>
+            <div class="player-info">
+              <div class="player-name">Bug #404 (Red) <span class="badge-role sus">SUSPECT</span></div>
+              <div class="player-desc">Fails silently in production &bull; Blames the cloud</div>
+            </div>
+            <button class="btn-vote" data-candidate="Bug #404">
+              <span class="vote-icon">❌</span> EJECT
+            </button>
+          </div>
+
+          <!-- Sus Candidate 3: Hallucinating LLM (Yellow) -->
+          <div class="player-vote-card sus" id="cardYellow">
+            <div class="player-avatar-mini yellow">
+              <div class="mini-visor"></div>
+            </div>
+            <div class="player-info">
+              <div class="player-name">Hallucinating LLM (Yellow) <span class="badge-role sus">IMPOSTOR?</span></div>
+              <div class="player-desc">Ungrounded answers &bull; Pretends to know facts</div>
+            </div>
+            <button class="btn-vote" data-candidate="Hallucinating LLM">
+              <span class="vote-icon">❌</span> EJECT
+            </button>
+          </div>
+
+          <!-- Candidate 4: 5th Generic Todo App (Pink) -->
+          <div class="player-vote-card" id="cardPink">
+            <div class="player-avatar-mini pink">
+              <div class="mini-visor"></div>
+            </div>
+            <div class="player-info">
+              <div class="player-name">Generic Todo App (Pink)</div>
+              <div class="player-desc">Rewritten 5 times &bull; Zero real users</div>
+            </div>
+            <button class="btn-vote" data-candidate="Generic Todo App">
+              <span class="vote-icon">⏭️</span> SKIP
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Voting Footer / Results Banner -->
+        <div class="voting-footer">
+          <div class="vote-result-box" id="voteResultBanner">
+            👉 <em>Click a button above to cast your vote!</em>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: COMMS ROOM (TRANSMIT SIGNAL & CONTACT) -->
+    <section id="comms-sec" class="deck-room room-comms">
+      <div class="room-sign">
+        <div class="sign-light blue-blink"></div>
+        <h2>ROOM: COMMS // TRANSMIT SIGNAL &amp; CONNECT</h2>
+      </div>
+      <p class="section-desc">Open an encrypted channel with Paulami Bhosle for internships, research, or collaboration.</p>
+
+      <div class="comms-terminal-grid">
+        
+        <!-- Transmission Tablet -->
+        <div class="comms-device">
+          <div class="device-antenna"></div>
+          <div class="device-screen">
+            <div class="signal-radar">
+              <div class="radar-sweep"></div>
+              <div class="radar-blip blip-1"></div>
+              <div class="radar-blip blip-2"></div>
+            </div>
+            <div class="comms-message">
+              <h3>SIGNAL FREQUENCY: ACTIVE</h3>
+              <p>"I'm always up for discussing AI architectures, internships, mechanistic interpretability, or trading 2 AM debugging stories."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channels List -->
+        <div class="channels-list">
+          
+          <a href="https://github.com/code-paul-creator" target="_blank" rel="noopener noreferrer" class="channel-card github">
+            <div class="channel-icon">
+              <svg width="28" height="28" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <span class="channel-label">GITHUB REPOSITORIES</span>
+              <span class="channel-handle">github.com/code-paul-creator</span>
+            </div>
+            <span class="channel-arrow">&rarr;</span>
+          </a>
+
+          <a href="https://www.linkedin.com/in/paulami-bhosle/" target="_blank" rel="noopener noreferrer" class="channel-card linkedin">
+            <div class="channel-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <span class="channel-label">LINKEDIN NETWORK</span>
+              <span class="channel-handle">linkedin.com/in/paulami-bhosle</span>
+            </div>
+            <span class="channel-arrow">&rarr;</span>
+          </a>
+
+          <a href="mailto:paulamibhosle@gmail.com" class="channel-card email">
+            <div class="channel-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.725v15.438h24v-15.438l-12 9.725z"/>
+              </svg>
+            </div>
+            <div class="channel-info">
+              <span class="channel-label">DIRECT TRANSMISSION</span>
+              <span class="channel-handle">paulamibhosle@gmail.com</span>
+            </div>
+            <span class="channel-arrow">&rarr;</span>
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- EMERGENCY MEETING POPUP MODAL (Authentic Among Us Animation) -->
+  <div class="modal-overlay" id="emergencyModal" aria-hidden="true">
+    <div class="emergency-modal-content">
+      <div class="siren-light"></div>
+      <div class="emergency-banner">EMERGENCY MEETING</div>
+      <div class="emergency-dialogue-box">
+        <div class="calling-crewmate">
+          <div class="mini-cm-face"></div>
+        </div>
+        <div class="meeting-msg">
+          <h3 class="caller-name">PAULAMI BHOSLE CALLED A MEETING!</h3>
+          <p class="meeting-text">
+            "Fellow Crewmates: I'm currently looking for a <strong>Software Engineering / AI Internship</strong> where I can build reliable systems, verify neural representations, and ship code that matters!"
+          </p>
+          <div class="modal-cta-buttons">
+            <a href="https://www.linkedin.com/in/paulami-bhosle/" target="_blank" rel="noopener noreferrer" class="btn-modal-action linkedin">
+              CONNECT ON LINKEDIN
+            </a>
+            <a href="mailto:paulamibhosle@gmail.com" class="btn-modal-action email">
+              SEND EMAIL DISPATCH
+            </a>
+            <button id="closeModalBtn" class="btn-modal-action close">
+              RETURN TO SHIP (DISMISS)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EJECTION OVERLAY SCREEN (When Voting Occurs) -->
+  <div class="ejection-screen" id="ejectionScreen" aria-hidden="true">
+    <div class="ejection-stars"></div>
+    <div class="ejection-drifter">
+      <div class="drifting-figure"></div>
+    </div>
+    <div class="ejection-text" id="ejectionText">Paulami was not an Impostor.</div>
+    <div class="impostor-count-text" id="impostorCountText">0 Impostors remain.</div>
+    <button class="btn-skip-ejection" id="skipEjectionBtn">CONTINUE SHIP PATROL &rarr;</button>
+  </div>
+
+  <!-- Footer Ship Stamp -->
+  <footer class="skeld-footer">
+    <div class="footer-inner">
+      <div class="ship-id">THE SKELD &bull; SECTOR 2026 &bull; GSA TERMINAL</div>
+      <div class="footer-quote">"First-year, first commits, first internship &mdash; one PR at a time." 🌱</div>
+      <div class="footer-copy">Designed with 💖 &amp; HTML/CSS for Paulami Bhosle &bull; Among Us Theme</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
